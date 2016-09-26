@@ -1,0 +1,32 @@
+<html>
+<!-->\\ cerner_2^5_2016 <!-->
+<head>
+<script>
+function fun1(jiraversion , jiraname){	
+	var jiraversion = document.getElementById('jiraversion').value ;
+	if(jiraversion == 1){jiraversion = '';}
+	var jiraname = document.getElementById('jiraname').value ;
+	var xhttp = new XMLHttpRequest();
+	xhttp.open("GET", "https://jira"+jiraversion+".cerner.com/rest/api/latest/issue/"+jiraname, true);
+	xhttp.send();
+	xhttp.onreadystatechange = function() {
+		  if (this.readyState == 4 && this.status == 200) {
+			var tt = this.responseText;
+			var ee = JSON.parse(tt);
+			if(ee.fields.reporter){document.getElementById("testtrap").innerHTML = "reporter: " + ee.fields.reporter.displayName + "(" + ee.fields.reporter.name + ")";}
+			if(ee.fields.assignee){document.getElementById("testtrap").innerHTML += "<br />assignedto: " + ee.fields.assignee.displayName + "(" + ee.fields.assignee.name + ")";}
+			if(ee.fields.summary){document.getElementById("testtrap").innerHTML += "<br />summary: " + ee.fields.summary ; }
+			if(ee.fields.status){document.getElementById("testtrap").innerHTML += "<br />status: " + ee.fields.status.name ;} 
+			document.getElementById("testtrap").innerHTML += "<br />link: " + "<a href=\"https://jira"+jiraversion+".cerner.com/browse/"+jiraname+"\">"+jiraname+"</a>" ; 
+		}
+	};
+}
+</script>
+</head>
+<body></body>
+<input type = "text" id="jiraversion" placeholder="Jira Version"></input>
+<input type = "text" id="jiraname" placeholder="Name of jira"></input>
+<input type = "button" id="clicker" onclick = "fun1()" value="click here"></input>
+<p id='testtrap'></p>
+</body>
+</html>
